@@ -19,44 +19,44 @@ const config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: "hsl(var(--cborder))",
+        input: "hsl(var(--cinput))",
+        ring: "hsl(var(--cring))",
+        background: "hsl(var(--cbackground))",
+        foreground: "hsl(var(--cforeground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsl(var(--cprimary))",
+          foreground: "hsl(var(--cprimary-foreground))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "hsl(var(--csecondary))",
+          foreground: "hsl(var(--csecondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "hsl(var(--cdestructive))",
+          foreground: "hsl(var(--cdestructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "hsl(var(--cmuted))",
+          foreground: "hsl(var(--cmuted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "hsl(var(--caccent))",
+          foreground: "hsl(var(--caccent-foreground))",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "hsl(var(--cpopover))",
+          foreground: "hsl(var(--cpopover-foreground))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "hsl(var(--ccard))",
+          foreground: "hsl(var(--ccard-foreground))",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--cradius)",
+        md: "calc(var(--cradius) - 2px)",
+        sm: "calc(var(--cradius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
@@ -74,7 +74,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [ require("daisyui")],
 } satisfies Config;
 
 export default config;
