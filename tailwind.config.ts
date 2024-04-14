@@ -10,71 +10,23 @@ const config = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
-      colors: {
-        border: "hsl(var(--cborder))",
-        input: "hsl(var(--cinput))",
-        ring: "hsl(var(--cring))",
-        background: "hsl(var(--cbackground))",
-        foreground: "hsl(var(--cforeground))",
-        primary: {
-          DEFAULT: "hsl(var(--cprimary))",
-          foreground: "hsl(var(--cprimary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--csecondary))",
-          foreground: "hsl(var(--csecondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--cdestructive))",
-          foreground: "hsl(var(--cdestructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--cmuted))",
-          foreground: "hsl(var(--cmuted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--caccent))",
-          foreground: "hsl(var(--caccent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--cpopover))",
-          foreground: "hsl(var(--cpopover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--ccard))",
-          foreground: "hsl(var(--ccard-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--cradius)",
-        md: "calc(var(--cradius) - 2px)",
-        sm: "calc(var(--cradius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+      boxShadow: {
+        'base': "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
       },
     },
   },
-  plugins: [ require("daisyui")],
+  daisyui: {
+    themes: ["pastel", "dracula"],
+    darkTheme: "dracula",
+    base: true,
+    styled: true,
+    utils: true,
+    prefix: "",
+    logs: true,
+    themeRoot: ":root",
+  },
+  plugins: [require("@tailwindcss/typography"), require("daisyui")],
 } satisfies Config;
 
 export default config;

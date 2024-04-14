@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 
 import "./globals.css";
 import "survey-core/defaultV2.css";
+import Header from "@/widgets/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className + " bg-base-300 min-h-dvh"}>
+        <div className="container m-auto pt-8">
+          <Header />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
