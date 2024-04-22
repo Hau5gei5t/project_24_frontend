@@ -19,7 +19,7 @@ export default function Pageform() {
   const onSubmit: SubmitHandler<PageModel> = (data) => {
      const page = { ...data, elements: [] };
      SetFormData({ ...formData, pages: [...formData.pages, page] });
-   
+    localStorage.setItem("formData", JSON.stringify({ ...formData, pages: [...formData.pages, page] }));
     
 
     

@@ -6,8 +6,6 @@ import { Model } from "survey-core";
 
 import { useFormData } from "@/FSDPages/createForm/ui/Createform";
 
-
-
 export default function Generalform() {
   const { formData, SetFormData } = useFormData();
   const {
@@ -20,6 +18,7 @@ export default function Generalform() {
   const onSubmit: SubmitHandler<SurveyModel> = (data) => {
     if (data.cookieName === "") delete data.cookieName;
     SetFormData({ ...formData, ...data });
+    localStorage.setItem("formData", JSON.stringify({ ...formData, ...data }));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
@@ -33,7 +32,7 @@ export default function Generalform() {
             <input
               type="radio"
               value={"ru"}
-              {...register("locale",{value:formData.locale})}
+              {...register("locale", { value: formData.locale })}
               className="radio"
             />
           </label>

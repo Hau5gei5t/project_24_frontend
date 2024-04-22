@@ -32,9 +32,10 @@ export default function Createform() {
   const [formData, SetFormData] = React.useState<createFormModel>(startData);
   const [survey, setSurvey] = React.useState(new Model());
   useEffect(() => {
-    setSurvey(new Model(formData));
-    survey.locale = formData.locale!;
-    console.log(formData);
+    const res = localStorage.getItem("formData") === null?formData:JSON.parse(localStorage.getItem("formData")!);
+    setSurvey(new Model(res));
+    survey.locale = res.locale!;
+    console.log(res);
   }, [formData]);
 
   return (

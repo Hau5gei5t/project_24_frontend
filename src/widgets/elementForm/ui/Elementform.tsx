@@ -23,6 +23,7 @@ export default function Elementform() {
     console.log(fd);
 
     SetFormData({ ...fd });
+    localStorage.setItem("formData", JSON.stringify({ ...fd }));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
