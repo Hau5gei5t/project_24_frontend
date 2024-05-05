@@ -3,27 +3,53 @@ import { ElementModel, ElementSchema } from "../model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Model } from "survey-core";
 import { useFormData } from "@/FSDPages/createForm/ui/Createform";
+import { useEffect, useState } from "react";
+import { createFormModel } from "@/FSDPages/createForm";
 
-export default function Elementform() {
+interface IElementFormProps {
+  index: number;
+  currentElement?: createFormModel["pages"][0]["elements"][0];
+  pageIndex?: number;
+}
+export default function Elementform(props: IElementFormProps) {
+  const { index, currentElement, pageIndex } = props;
   const { formData, SetFormData } = useFormData();
+  const [element, setElement] =
+    useState<createFormModel["pages"][0]["elements"][0] | undefined>(currentElement);
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ElementModel>({
     resolver: zodResolver(ElementSchema),
+    defaultValues: element,
   });
+
   const onSubmit: SubmitHandler<ElementModel> = (data) => {
-    const fd = formData;
-    const res = { ...data };
-    if (res.type === "rating") delete res.inputType;
-
-    fd.pages[fd.pages.length - 1].elements.push(res);
-    console.log(fd);
-
-    SetFormData({ ...fd });
-    localStorage.setItem("formData", JSON.stringify({ ...fd }));
+    if (element === undefined) {
+      const fd = formData;
+      const res = { ...data };
+      if (res.type === "rating") delete res.inputType;
+      fd.pages[index].elements.push(res);
+      SetFormData({ ...fd });
+      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      document.getElementById("elementModalCreate" + index)?.close();
+      reset();
+    } else {
+      const fd = formData;
+      const res = { ...data };
+      if (res.type === "rating") delete res.inputType;
+      setElement(res)
+      fd.pages[pageIndex!].elements[index] = res;
+      SetFormData({ ...fd });
+      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      document
+        .getElementById(`elementModalEdit_${pageIndex}_${index}`)
+        ?.close();
+    }
+    
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

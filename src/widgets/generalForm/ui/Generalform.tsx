@@ -17,8 +17,8 @@ export default function Generalform() {
   });
   const onSubmit: SubmitHandler<SurveyModel> = (data) => {
     if (data.cookieName === "") delete data.cookieName;
-    SetFormData({ ...formData, ...data });
     localStorage.setItem("formData", JSON.stringify({ ...formData, ...data }));
+    SetFormData({ ...formData, ...data });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

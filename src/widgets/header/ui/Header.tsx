@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const link = pathname.split("/")[1]
+  const link = pathname.split("/")[1];
   const [currentPath, setCurrentPath] = useState<string>(
     link.length > 0 ? link : "menu"
   );
@@ -93,7 +93,7 @@ export default function Header() {
                 <Link href={"#"}>Статистика</Link>
               </li>
               <li>
-                <Link href={"#"}>Редактор</Link>
+                <Link href={"#"}>Управление</Link>
               </li>
               <li>
                 <Link href={"#"}>Выйти</Link>
@@ -115,7 +115,7 @@ export default function Header() {
           </option>
           <option value={"profile"}>Личный кабинет</option>
           <option value={"stats"}>Статистика</option>
-          <option value={"createForm"}>Редактор</option>
+          <option value={"management"}>Управление</option>
           <option value={"logout"}>Выйти</option>
         </select>
       </div>
