@@ -2,9 +2,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { PageModel, PageSchema } from "../model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useFormData } from "@/FSDPages/createForm/ui/Createform";
+
 import { ElementModel } from "@/widgets/elementForm";
 import { createFormModel } from "@/FSDPages/createForm";
+import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
+import useStore from "@/FSDApp/stores/useStore";
 
 interface IPageFormProps {
   index?: number;
@@ -12,12 +14,21 @@ interface IPageFormProps {
 }
 
 export default function Pageform(props: IPageFormProps) {
+  const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
+    useSurveysStore((state) => state);
+  const surveyEdit = useStore(useSurveysStore, (state) => state.surveyEdit);
+  let survey, oldSurvey;
+  if (surveyEdit !== undefined) {
+    survey = surveyEdit.currentSurvey;
+    oldSurvey = surveyEdit.oldSurvey;
+  }
+
   const { page, index } = props;
-  const { formData, SetFormData } = useFormData();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<PageModel>({
     resolver: zodResolver(PageSchema),
@@ -25,21 +36,23 @@ export default function Pageform(props: IPageFormProps) {
   });
   const onSubmit: SubmitHandler<PageModel> = (data) => {
     if (page === undefined && index === undefined) {
-      const fd = formData;
+      const fd = { ...survey };
       const newPage = { ...data, elements: [] };
-      fd.pages.push(newPage);
-
-      SetFormData({ ...fd });
-      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      fd.pages = [...fd.pages, newPage];
+      setCurrentSurvey({...fd});
       document.getElementById("pageModalCreate")?.close();
+      reset();
     }
     if (page !== undefined && index !== undefined) {
-      const fd = formData;
+      const fd = { ...survey };
       const res = { ...data };
-      fd.pages[index] = { ...res, elements: page.elements };
+      const a = fd.pages.map((p, i) => {
+        if (i === index) return {...res, elements: p.elements};
+        return p;
+      });
+      fd.pages = [...a];
 
-      SetFormData({ ...fd });
-      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      setCurrentSurvey({...fd});
       document.getElementById("pageModalEdit" + index)?.close();
     }
   };

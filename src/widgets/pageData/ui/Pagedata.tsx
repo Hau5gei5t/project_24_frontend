@@ -1,3 +1,5 @@
+import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
+import useStore from "@/FSDApp/stores/useStore";
 import { createFormModel } from "@/FSDPages/createForm/model";
 import { useFormData } from "@/FSDPages/createForm/ui/Createform";
 import Elementdata from "@/widgets/elementData/ui";
@@ -10,7 +12,14 @@ interface IPageDataProps {
   index: number;
 }
 export default function Pagedata(props: any) {
-  const { formData, SetFormData } = useFormData();
+    const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
+      useSurveysStore((state) => state);
+    const surveyEdit = useStore(useSurveysStore, (state) => state.surveyEdit);
+    let survey, oldSurvey;
+    if (surveyEdit !== undefined) {
+      survey = surveyEdit.currentSurvey;
+      oldSurvey = surveyEdit.oldSurvey;
+    }
   const { page, isEditing, index } = props;
   if (!page) return null;
   return (
@@ -22,10 +31,9 @@ export default function Pagedata(props: any) {
             : "hidden opacity-0"
         }
         onClick={() => {
-          const fd = formData;
+          const fd = { ...survey };
           fd.pages = fd.pages.filter((p) => p.name !== page.name);
-          SetFormData({ ...fd });
-          localStorage.setItem("formData", JSON.stringify({ ...fd }));
+          setCurrentSurvey({...fd});
         }}
       >
         <svg

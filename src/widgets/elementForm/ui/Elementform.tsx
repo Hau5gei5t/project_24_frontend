@@ -5,6 +5,8 @@ import { Model } from "survey-core";
 import { useFormData } from "@/FSDPages/createForm/ui/Createform";
 import { useEffect, useState } from "react";
 import { createFormModel } from "@/FSDPages/createForm";
+import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
+import useStore from "@/FSDApp/stores/useStore";
 
 interface IElementFormProps {
   index: number;
@@ -13,9 +15,18 @@ interface IElementFormProps {
 }
 export default function Elementform(props: IElementFormProps) {
   const { index, currentElement, pageIndex } = props;
-  const { formData, SetFormData } = useFormData();
-  const [element, setElement] =
-    useState<createFormModel["pages"][0]["elements"][0] | undefined>(currentElement);
+  const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
+    useSurveysStore((state) => state);
+  const surveyEdit = useStore(useSurveysStore, (state) => state.surveyEdit);
+  let survey, oldSurvey;
+  if (surveyEdit !== undefined) {
+    survey = surveyEdit.currentSurvey;
+    oldSurvey = surveyEdit.oldSurvey;
+  }
+
+  const [element, setElement] = useState<
+    createFormModel["pages"][0]["elements"][0] | undefined
+  >(currentElement);
   const {
     register,
     handleSubmit,
@@ -29,27 +40,43 @@ export default function Elementform(props: IElementFormProps) {
 
   const onSubmit: SubmitHandler<ElementModel> = (data) => {
     if (element === undefined) {
-      const fd = formData;
+      const fd = { ...survey };
       const res = { ...data };
       if (res.type === "rating") delete res.inputType;
-      fd.pages[index].elements.push(res);
-      SetFormData({ ...fd });
-      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      const a = fd.pages.map((p, i) => {
+        if (i === index) {
+          return { ...p, elements: [...p.elements, res] };
+        }
+        return p;
+      });
+      fd.pages = [...a];
+      setCurrentSurvey({ ...fd });
       document.getElementById("elementModalCreate" + index)?.close();
       reset();
     } else {
-      const fd = formData;
+      const fd = { ...survey };
       const res = { ...data };
       if (res.type === "rating") delete res.inputType;
-      setElement(res)
-      fd.pages[pageIndex!].elements[index] = res;
-      SetFormData({ ...fd });
-      localStorage.setItem("formData", JSON.stringify({ ...fd }));
+      const a = fd.pages.map((p, i) => {
+        if (i === pageIndex) {
+          return {
+            ...p,
+            elements: p.elements.map((e, j) => {
+              if (j === index) return res;
+              return e;
+            }),
+          };
+        }
+        return p;
+      })
+      setElement(res);
+      // fd.pages[pageIndex!].elements[index] = res;
+      fd.pages = [...a];
+      setCurrentSurvey({ ...fd });
       document
         .getElementById(`elementModalEdit_${pageIndex}_${index}`)
         ?.close();
     }
-    
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">

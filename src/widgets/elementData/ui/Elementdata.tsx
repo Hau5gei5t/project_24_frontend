@@ -1,3 +1,5 @@
+import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
+import useStore from "@/FSDApp/stores/useStore";
 import { createFormModel } from "@/FSDPages/createForm/model";
 import { useFormData } from "@/FSDPages/createForm/ui/Createform";
 import { Elementform } from "@/widgets/elementForm";
@@ -9,7 +11,14 @@ interface IElementDataProps {
   pageIndex: number;
 }
 export default function Elementdata(props: IElementDataProps) {
-  const { formData, SetFormData } = useFormData();
+    const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
+      useSurveysStore((state) => state);
+    const surveyEdit = useStore(useSurveysStore, (state) => state.surveyEdit);
+    let survey, oldSurvey;
+    if (surveyEdit !== undefined) {
+      survey = surveyEdit.currentSurvey;
+      oldSurvey = surveyEdit.oldSurvey;
+    }
   const { element, isEditing, index,pageIndex } = props;
   return (
     <div>
@@ -21,12 +30,18 @@ export default function Elementdata(props: IElementDataProps) {
               : "hidden opacity-0"
           }
           onClick={() => {
-            const fd = formData;
-            fd.pages.forEach((p) => {
-              p.elements = p.elements.filter((e) => e.name !== element.name);
+            const fd = survey;
+            fd.pages = fd.pages.map((p,i) => {
+              if (i === pageIndex) {
+                return {
+                  ...p,
+                  elements: p.elements.filter((e, j) => j !== index),
+                };
+              } else {
+                return p;
+              }
             });
-            SetFormData({ ...fd });
-            localStorage.setItem("formData", JSON.stringify({ ...fd }));
+            setCurrentSurvey({...fd});
           }}
         >
           <svg
