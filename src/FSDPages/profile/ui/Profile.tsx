@@ -4,11 +4,12 @@ import { UserState } from "@/FSDApp/stores/user-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { UserModel, UserSchema } from "../model";
+import { EditUserModel, EditUserSchema, UserModel, UserSchema } from "../model";
 import { Multiselect } from "multiselect-react-dropdown";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
-const THEMES = [
+const UserTHEMES = [
   "theme 1",
   "theme 2",
   "theme 3",
@@ -19,37 +20,114 @@ const THEMES = [
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [UserThemes, setUserThemes] = useState<string[]>([]);
+  const [themeId, setThemeId] = useState<string>("");
+  const [themes, setThemes] = useState<string[]>([]);
+  const { setUserData } = useUserStore((state) => state);
   const user: UserState["userData"] = useStore(
     useUserStore,
-    (state) => state.userData
+    (state: UserState): UserState["userData"] => state.userData
   );
-   const isAuth = useStore(useUserStore, (state) => state.isAuthenticated);
+  const isAuth = useStore(
+    useUserStore,
+    (state: UserState) => state.isAuthenticated
+  );
 
-   const router = useRouter();
-   useEffect(() => {
-     if (!isAuth && isAuth !== undefined) {
-       router.push("/login");
-     }
-   }, [isAuth, router]);
+  const router = useRouter();
+  useEffect(() => {
+    if (!isAuth && isAuth !== undefined) {
+      router.push("/login");
+    }
+  }, [isAuth, router]);
   const {
     register,
     handleSubmit,
     reset,
     control,
     formState: { errors },
-  } = useForm<UserModel>({
-    resolver: zodResolver(UserSchema),
-    defaultValues: {
-      ...user,
-    },
+  } = useForm<EditUserModel>({
+    resolver: zodResolver(EditUserSchema),
   });
 
-  if (user === undefined) return <>loading...</>;
-  const onSubmit: SubmitHandler<UserModel> = (data) => {
-    alert("asd")
-    // alert(JSON.stringify(data));
+  useEffect(() => {
+    axios.get("http://localhost:3000/themes").then((res) => {
+      setThemes(
+        res.data.map((t: any) => t.name).filter((v, i, a) => a.indexOf(v) == i)
+      );
+    });
+    if (localStorage.getItem("newAccount") === "true") {
+      setIsEditing(true);
+      localStorage.removeItem("newAccount");
+    }
+    if (user?.id !== undefined) {
+      axios
+        .get("http://localhost:3000/themesUsers?userId=" + user?.id + "")
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.length > 0) {
+            setThemeId(res.data[0].id);
+            setUserThemes(res.data[0].themes);
+          } else {
+            axios
+              .post(
+                "http://localhost:3000/themesUsers",
+                {
+                  userId: user?.id,
+                  themes: [],
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                }
+              )
+              .then((res) => {
+                setThemeId(res.data.id);
+                setUserThemes([]);
+              });
+          }
+        });
+    }
+    reset({
+      firstName: user?.firstName,
+      email: user?.email,
+      description: user?.description,
+      age: user?.age.toString(),
+      gender: user?.gender,
+      education: user?.education,
+      occupation: user?.occupation,
+      lastName: user?.lastName,
+    });
+  }, [user]);
 
-    reset();
+  if (user === undefined) return <>loading...</>;
+  const onSubmit: SubmitHandler<EditUserModel> = (data) => {
+    if (data.themes === undefined) data.themes = [];
+    axios
+      .patch("http://localhost:3000/themesUsers/" + themeId, {
+        themes: data.themes,
+      })
+      .then((res) => {
+        // setUserThemes(res.data[0].themes);
+      });
+
+    delete data.themes;
+    setUserData({
+      ...user,
+      ...data,
+      age: parseInt(data.age),
+    });
+    axios
+      .patch("http://localhost:3000/users/" + user?.id, {
+        ...user,
+        ...data,
+        age: parseInt(data.age),
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+    setIsEditing(!isEditing);
   };
   return (
     <>
@@ -93,7 +171,7 @@ export default function Profile() {
               <>
                 <div className="card-body gap-5">
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <p>{errors.age?.message}</p>
+                    <span className="">{JSON.stringify(errors)}</span>
                     <div className="form-control">
                       <label className="label">
                         <span className="label-text">Имя</span>
@@ -114,8 +192,9 @@ export default function Profile() {
                         type="text"
                         placeholder="Фамилия"
                         className="input input-bordered"
-                      ></input>
+                      />
                     </div>
+
                     <div className="form-control">
                       <label className="label">
                         <span className="label-text">Возраст</span>
@@ -172,8 +251,8 @@ export default function Profile() {
                         render={({ field: { onChange, value } }) => (
                           <>
                             <Multiselect
-                              options={THEMES}
-                              selectedValues={value}
+                              options={themes}
+                              selectedValues={UserThemes}
                               onSelect={onChange}
                               onRemove={onChange}
                               isObject={false}
@@ -189,7 +268,7 @@ export default function Profile() {
                     </div>
                     <div className="form-control ">
                       <button type="submit" className="btn btn-primary mt-5">
-                        Войти
+                        Сохранить
                       </button>
                     </div>
                   </form>
@@ -213,7 +292,7 @@ export default function Profile() {
                 <div>
                   <p>Интересы:</p>
                   <div className="flex flex-wrap flex-row gap-x-7 gap-y-3 mt-3 w-[60%] items-center">
-                    {user.themes.map((theme) => (
+                    {UserThemes.map((theme) => (
                       <div key={theme} className="badge badge-neutral badge-lg">
                         {theme}
                       </div>

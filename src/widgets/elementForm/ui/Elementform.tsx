@@ -13,7 +13,7 @@ interface IElementFormProps {
   currentElement?: createFormModel["pages"][0]["elements"][0];
   pageIndex?: number;
 }
-export default function Elementform(props: IElementFormProps) {
+export default function Elemdentform(props: IElementFormProps) {
   const { index, currentElement, pageIndex } = props;
   const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
     useSurveysStore((state) => state);

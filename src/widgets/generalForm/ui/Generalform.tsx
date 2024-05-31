@@ -9,6 +9,8 @@ import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
 import { createFormModel } from "@/FSDPages/createForm/model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+
 
 export default function Generalform() {
   const router = useRouter();
@@ -25,6 +27,7 @@ export default function Generalform() {
     if (data.cookieName === "") delete data.cookieName;
     data.pages = []
     addSurvey(data);
+    axios.post("http://localhost:3000/surveys", data);
     document.getElementById("generalModalCreate")?.close();
     reset();
   };

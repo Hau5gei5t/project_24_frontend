@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function Header() {
   const router = useRouter();
@@ -142,7 +143,9 @@ export default function Header() {
               <option value={"profile"}>Личный кабинет</option>
               <option value={"stats"}>Статистика</option>
               <option value={"management"}>Управление</option>
-              <option value={"#"} onClick={() => logout()}>
+              <option value={"#"} onClick={() => {logout()
+                Cookies.remove("token")
+              }}>
                 Выйти
               </option>
             </select>

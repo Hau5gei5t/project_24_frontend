@@ -2,8 +2,14 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RegisterModel, RegisterSchema } from "../model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { RegisterUser } from "../api";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/FSDApp/providers/user-store-provider";
 
 export default function Register() {
+  const { login, setUserData } = useUserStore((state) => state);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -16,11 +22,17 @@ export default function Register() {
       password: "",
     },
   });
-  const onSubmit: SubmitHandler<RegisterModel> = (data) => {
-    alert(JSON.stringify(data));
-    reset();
+  const onSubmit: SubmitHandler<RegisterModel> = async (data) => {
+    const response = await RegisterUser(data);
+    if (response.status !== 201) {
+      alert("Почта уже занята");
+    }
+    Cookies.set("token", response.data.accessToken);
+    setUserData(response.data.user);
+    login();
+    localStorage.setItem("newAccount", JSON.stringify(true));
+    router.push("/profile");
   };
-  console.log(errors);
 
   return (
     <div className="hero min-h-[calc(100dvh-10rem)]">

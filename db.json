@@ -1,0 +1,117 @@
+{
+  "users": [
+    {
+      "email": "admin@admin.com",
+      "password": "$2a$10$JixzKmwXgV.gqxKQla5WfeYLicN5RRScd98LCRidgodTDGvpPSQ9y",
+      "role": "req",
+      "firstName": "Иван",
+      "lastName": "Иванов",
+      "age": 25,
+      "gender": "male",
+      "education": "423",
+      "occupation": "234234",
+      "id": 1
+    },
+    {
+      "email": "user@user.com",
+      "password": "$2a$10$a0RPMNThHIFeoTqCwOkqhubgUUCQFyJ/ehuJLcfd4xiw3/ywLU8fu",
+      "role": "res",
+      "firstName": "Мария",
+      "lastName": "Иванова",
+      "age": 30,
+      "gender": "female",
+      "education": "",
+      "occupation": "",
+      "id": 2
+    },
+    {
+      "email": "admin1@admin.com",
+      "password": "$2a$10$BmWybspm5qeW/Flnnnrd..kmq2xi5Vw2mgBpR3GyiNpK3uqKuTj06",
+      "role": "req",
+      "firstName": "Иван",
+      "lastName": "Иванов",
+      "age": 25,
+      "gender": "male",
+      "education": "",
+      "occupation": "",
+      "themes": [],
+      "id": 3
+    },
+    {
+      "email": "admin2@admin.com",
+      "password": "$2a$10$AbE9OgI4SiZFTnzyv/BFIODQOcCqmkd/yPe19RPw9BNesiywulG7S",
+      "firstName": "ewqeqweqwer",
+      "lastName": "qweqweqweqwe",
+      "age": 25,
+      "gender": "male",
+      "education": "qweqwe",
+      "occupation": "qweqwe",
+      "role": "res",
+      "id": 4,
+      "themes": [
+        "theme 1"
+      ]
+    }
+  ],
+  "surveys": [
+    {
+      "locale": "ru",
+      "title": "test1",
+      "description": "test",
+      "logoPosition": "left",
+      "pages": [
+        {
+          "name": "hehe",
+          "title": "hehe",
+          "description": "hehe",
+          "elements": [
+            {
+              "type": "text",
+              "inputType": "text",
+              "name": "q1",
+              "title": "q1",
+              "description": "q1",
+              "isRequired": true
+            }
+          ]
+        }
+      ],
+      "id": 1
+    }
+  ],
+  "themes": [
+    {
+      "name": "Велогонки",
+      "id": 1
+    },
+    {
+      "name": "Еда",
+      "id": 2
+    },
+    {
+      "name": "Музыка",
+      "id": 3
+    }
+  ],
+  "themesUsers": [
+    {
+      "id": 1,
+      "themes": [
+        "Велогонки",
+        "Еда",
+        "Музыка"
+      ],
+      "userId": 4
+    },
+    {
+      "userId": 1,
+      "themes": [
+        "Музыка"
+      ],
+      "id": 2
+    }
+  ],
+  "answersUsers": [
+    
+  ]
+}

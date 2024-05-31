@@ -9,7 +9,6 @@ export type UserState = {
     firstName: string;
     lastName: string;
     avatar?: string;
-    themes: string[];
     age: number;
     gender: "male" | "female"|undefined;
     education: string;

@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useUserStore } from "@/FSDApp/providers/user-store-provider";
 import { useRouter } from "next/navigation";
 import { UserModel } from "@/FSDPages/profile/model";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-const mockData : UserModel[] = [
+const mockData: UserModel[] = [
   {
     id: "1",
     email: "example@ex.com",
@@ -53,20 +55,22 @@ export default function Login() {
       rememberMe: false,
     },
   });
-  const onSubmit: SubmitHandler<LoginModel> = (data) => {
-    // alert(JSON.stringify(data));
-    login();
-
-    if (data.email === "example@ex.com") {
-      setUserData(mockData[0]);
-      router.push("/management");
-    } else {
-      if (data.email === "example2@ex.com") {
-        setUserData(mockData[1]);
-        router.push("/profile");
-      }
-    }
-
+  const onSubmit: SubmitHandler<LoginModel> = async (data) => {
+    axios
+      .post("http://localhost:3000/login", {
+        email: data.email,
+        password: data.password,
+      })
+      .then((res) => {
+        login();
+        Cookies.set("token", res.data.accessToken);
+        setUserData(res.data.user);
+        if (res.data.user.role === "res") {
+          router.push("/profile");
+        } else {
+          router.push("/management");
+        }
+      });
     reset();
   };
   console.log(errors);

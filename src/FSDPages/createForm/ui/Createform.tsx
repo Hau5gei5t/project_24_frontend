@@ -13,6 +13,7 @@ import Pagedata from "@/widgets/pageData/ui/Pagedata";
 import { useSurveysStore } from "@/FSDApp/providers/surveys-store-provider";
 import useStore from "@/FSDApp/stores/useStore";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const startData: createFormModel = {
   title: "Новая форма",
@@ -25,7 +26,7 @@ const startData: createFormModel = {
 export default function Createform() {
   const { setSurveys, deleteSurvey, setCurrentSurvey, updateSurvey } =
     useSurveysStore((state) => state);
-    const router = useRouter();
+  const router = useRouter();
   const surveyEdit = useStore(useSurveysStore, (state) => state.surveyEdit);
   let survey, oldSurvey;
   if (surveyEdit !== undefined) {
@@ -125,6 +126,9 @@ export default function Createform() {
               } else {
                 updateSurvey(oldSurvey.title, { ...survey });
               }
+              axios.patch("http://localhost:3000/surveys/" + survey.id, {
+                ...survey,
+              });
               router.push("/management");
             }}
           >
