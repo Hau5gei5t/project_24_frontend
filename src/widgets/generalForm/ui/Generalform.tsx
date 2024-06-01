@@ -10,9 +10,15 @@ import { createFormModel } from "@/FSDPages/createForm/model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-
+import useStore from "@/FSDApp/stores/useStore";
+import { UserState } from "@/FSDApp/stores/user-store";
+import { useUserStore } from "@/FSDApp/providers/user-store-provider";
 
 export default function Generalform() {
+  const user: UserState["userData"] = useStore(
+    useUserStore,
+    (state: UserState): UserState["userData"] => state.userData
+  );
   const router = useRouter();
   const { addSurvey } = useSurveysStore((state) => state);
   const {
@@ -25,9 +31,15 @@ export default function Generalform() {
   });
   const onSubmit: SubmitHandler<createFormModel> = (data) => {
     if (data.cookieName === "") delete data.cookieName;
-    data.pages = []
-    addSurvey(data);
-    axios.post("http://localhost:3000/surveys", data);
+    data.pages = [];
+
+    axios.post("http://localhost:3000/surveys", data).then((res) => {
+      addSurvey(res.data);
+      axios.post("http://localhost:3000/surveysUsers", {
+        surveyId: res.data.id,
+        userId: user?.id,
+      });
+    });
     document.getElementById("generalModalCreate")?.close();
     reset();
   };

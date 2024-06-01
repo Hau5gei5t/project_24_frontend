@@ -141,7 +141,7 @@ export default function Header() {
                 Меню
               </option>
               <option value={"profile"}>Личный кабинет</option>
-              <option value={"stats"}>Статистика</option>
+              <option value={"statistics"}>Статистика</option>
               <option value={"management"}>Управление</option>
               <option value={"#"} onClick={() => {logout()
                 Cookies.remove("token")

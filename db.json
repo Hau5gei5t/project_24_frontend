@@ -20,8 +20,8 @@
       "lastName": "Иванова",
       "age": 30,
       "gender": "female",
-      "education": "",
-      "occupation": "",
+      "education": "1",
+      "occupation": "1",
       "id": 2
     },
     {
@@ -34,7 +34,6 @@
       "gender": "male",
       "education": "",
       "occupation": "",
-      "themes": [],
       "id": 3
     },
     {
@@ -47,38 +46,10 @@
       "education": "qweqwe",
       "occupation": "qweqwe",
       "role": "res",
-      "id": 4,
-      "themes": [
-        "theme 1"
-      ]
+      "id": 4
     }
   ],
-  "surveys": [
-    {
-      "locale": "ru",
-      "title": "test1",
-      "description": "test",
-      "logoPosition": "left",
-      "pages": [
-        {
-          "name": "hehe",
-          "title": "hehe",
-          "description": "hehe",
-          "elements": [
-            {
-              "type": "text",
-              "inputType": "text",
-              "name": "q1",
-              "title": "q1",
-              "description": "q1",
-              "isRequired": true
-            }
-          ]
-        }
-      ],
-      "id": 1
-    }
-  ],
+  "surveys": [],
   "themes": [
     {
       "name": "Велогонки",
@@ -96,22 +67,22 @@
   "themesUsers": [
     {
       "id": 1,
-      "themes": [
-        "Велогонки",
-        "Еда",
-        "Музыка"
-      ],
+      "themes": ["Велогонки", "Еда", "Музыка"],
       "userId": 4
     },
     {
       "userId": 1,
-      "themes": [
-        "Музыка"
-      ],
+      "themes": ["Музыка"],
       "id": 2
+    },
+    {
+      "userId": 2,
+      "themes": ["Велогонки", "Музыка"],
+      "id": 3
     }
   ],
   "answersUsers": [
     
-  ]
+  ],
+  "surveysUsers": []
 }

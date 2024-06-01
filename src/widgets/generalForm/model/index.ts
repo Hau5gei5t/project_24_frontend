@@ -23,6 +23,7 @@ export const SurveySchema = z.object({
   completedHtml: z.object({ ru: z.string() }).optional(),
   completedBeforeHtml: z.object({ ru: z.string() }).optional(),
   loadingHtml: z.object({ ru: z.string() }).optional(),
+  id: z.number().optional(),
 });
 export type SurveyModel = z.infer<typeof SurveySchema>;
 
