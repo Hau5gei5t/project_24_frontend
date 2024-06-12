@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nextjs_server
+    container_name: "container_front"
+    ports:
+      - "80:3000"
+    environment:
+      NEXT_PUBLIC_SERVER_URL: django
+
+  django:
+    build:
+      context: ../back-end-repos/
+      dockerfile: Dockerfile
+    image: django_server
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    expose:
+      - 8000
+    ports:
+      - "127.0.0.1:8000:8000"
+
+    container_name: "container_back"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16.0
+    container_name: "container_postgres"
+    expose:
+      - 5432
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: "project_database"
+      POSTGRES_PASSWORD: "1"
+      POSTGRES_USER: "defuser"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: "my-network"
+    external: true
+
+volumes:
+  pgdata:

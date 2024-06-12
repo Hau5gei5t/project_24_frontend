@@ -34,13 +34,13 @@ export default function Surveyмanagement() {
     }
     if (user?.role !== "res") {
       axios
-        .get("http://localhost:3000/surveysUsers?userId=" + user?.id)
+        .get(process.env.NEXT_PUBLIC_SERVER_URL + "/surveysUsers?userId=" + user?.id)
         .then((res) => {
           const tempList = [];
           console.log(res.data);
           res.data.forEach((item: any) => {
             axios
-              .get("http://localhost:3000/surveys/" + item.surveyId)
+              .get(process.env.NEXT_PUBLIC_SERVER_URL + "/surveys/" + item.surveyId)
               .then((res) => {
                 console.log(res.data);
                 tempList.push(res.data);
@@ -52,7 +52,7 @@ export default function Surveyмanagement() {
           });
         });
     } else {
-      axios.get("http://localhost:3000/surveys").then((res) => {
+      axios.get(process.env.NEXT_PUBLIC_SERVER_URL + "/surveys").then((res) => {
         setSurveys(res.data);
       });
     }
@@ -137,7 +137,7 @@ export default function Surveyмanagement() {
                 // Display the "Saving..." message (pass a string value to display a custom message)
                 options.showSaveInProgress();
                 axios
-                  .post("http://localhost:3000/answersUsers", {
+                  .post(process.env.NEXT_PUBLIC_SERVER_URL + "/answersUsers", {
                     surveyId: item.id,
                     answers: toModelSurvey.getPlainData(),
                     userId: user?.id,
@@ -238,7 +238,7 @@ export default function Surveyмanagement() {
 
                           axios
                             .delete(
-                              "http://localhost:3000/surveys/" + idToDelete
+                              process.env.NEXT_PUBLIC_SERVER_URL + "/surveys/" + idToDelete
                             )
                             .then((res) => {
                               deleteSurvey(item.title!);

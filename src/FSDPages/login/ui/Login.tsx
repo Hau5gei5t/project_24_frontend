@@ -57,7 +57,7 @@ export default function Login() {
   });
   const onSubmit: SubmitHandler<LoginModel> = async (data) => {
     axios
-      .post("http://localhost:3000/login", {
+      .post(process.env.NEXT_PUBLIC_SERVER_URL + "/login", {
         email: data.email,
         password: data.password,
       })

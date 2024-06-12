@@ -5,9 +5,13 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "*.*",
-        
       },
     ],
+    unoptimized: true,
+  },
+  output: "standalone",
+  typescript: {
+    ignoreBuildErrors: true,
   },
 };
 

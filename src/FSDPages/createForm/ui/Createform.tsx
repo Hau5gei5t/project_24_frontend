@@ -126,9 +126,12 @@ export default function Createform() {
               } else {
                 updateSurvey(oldSurvey.title, { ...survey });
               }
-              axios.patch("http://localhost:3000/surveys/" + survey.id, {
-                ...survey,
-              });
+              axios.patch(
+                process.env.NEXT_PUBLIC_SERVER_URL + "/surveys/" + survey.id,
+                {
+                  ...survey,
+                }
+              );
               router.push("/management");
             }}
           >

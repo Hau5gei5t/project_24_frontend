@@ -13,7 +13,7 @@ type userResponse = {
 
 async function RegisterUser(data: RegisterModel): Promise<userResponse> {
   return await axios
-    .post(`http://localhost:3000/register`, {
+    .post(process.env.NEXT_PUBLIC_SERVER_URL + `/register`, {
       email: data.email,
       password: data.password,
       firstName: "",

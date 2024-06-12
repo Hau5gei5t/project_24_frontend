@@ -32,7 +32,7 @@ export default function Statistic() {
       if (!isAuth && isAuth !== undefined) {
         router.push("/login");
       }
-      axios.get("http://localhost:3000/surveys").then((res) => {
+      axios.get(process.env.NEXT_PUBLIC_SERVER_URL + "/surveys").then((res) => {
         console.log(res.data);
 
         setSurveys(res.data);

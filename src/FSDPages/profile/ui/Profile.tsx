@@ -50,7 +50,7 @@ export default function Profile() {
   });
 
   useEffect(() => {
-    axios.get("http://localhost:3000/themes").then((res) => {
+    axios.get(process.env.NEXT_PUBLIC_SERVER_URL + "/themes").then((res) => {
       setThemes(
         res.data.map((t: any) => t.name).filter((v, i, a) => a.indexOf(v) == i)
       );
@@ -61,7 +61,7 @@ export default function Profile() {
     }
     if (user?.id !== undefined) {
       axios
-        .get("http://localhost:3000/themesUsers?userId=" + user?.id + "")
+        .get(process.env.NEXT_PUBLIC_SERVER_URL + "/themesUsers?userId=" + user?.id + "")
         .then((res) => {
           console.log(res.data);
           if (res.data.length > 0) {
@@ -70,7 +70,7 @@ export default function Profile() {
           } else {
             axios
               .post(
-                "http://localhost:3000/themesUsers",
+                process.env.NEXT_PUBLIC_SERVER_URL + "/themesUsers",
                 {
                   userId: user?.id,
                   themes: [],
@@ -105,7 +105,7 @@ export default function Profile() {
   const onSubmit: SubmitHandler<EditUserModel> = (data) => {
     if (data.themes === undefined) data.themes = [];
     axios
-      .patch("http://localhost:3000/themesUsers/" + themeId, {
+      .patch(process.env.NEXT_PUBLIC_SERVER_URL + "/themesUsers/" + themeId, {
         themes: data.themes,
       })
       .then((res) => {
@@ -119,7 +119,7 @@ export default function Profile() {
       age: parseInt(data.age),
     });
     axios
-      .patch("http://localhost:3000/users/" + user?.id, {
+      .patch(process.env.NEXT_PUBLIC_SERVER_URL + "/users/" + user?.id, {
         ...user,
         ...data,
         age: parseInt(data.age),

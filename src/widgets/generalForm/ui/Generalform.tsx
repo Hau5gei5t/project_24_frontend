@@ -33,13 +33,15 @@ export default function Generalform() {
     if (data.cookieName === "") delete data.cookieName;
     data.pages = [];
 
-    axios.post("http://localhost:3000/surveys", data).then((res) => {
-      addSurvey(res.data);
-      axios.post("http://localhost:3000/surveysUsers", {
-        surveyId: res.data.id,
-        userId: user?.id,
+    axios
+      .post(process.env.NEXT_PUBLIC_SERVER_URL + "/surveys", data)
+      .then((res) => {
+        addSurvey(res.data);
+        axios.post(process.env.NEXT_PUBLIC_SERVER_URL + "/surveysUsers", {
+          surveyId: res.data.id,
+          userId: user?.id,
+        });
       });
-    });
     document.getElementById("generalModalCreate")?.close();
     reset();
   };
